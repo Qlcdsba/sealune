@@ -6,11 +6,30 @@ import {
 }
 
 // Values
+pub fn check_continuity(Reconciliation) -> Array[ChainFinding]
+
 pub fn reconcile(Array[Slip], Array[Slip]) -> Reconciliation
 
 // Errors
 
 // Types and methods
+#derive(Eq, @debug.Debug)
+pub(all) enum ChainFault {
+  AmbiguousOrder
+  OverlappingCustody
+  CustodianMismatch
+}
+pub fn ChainFault::equal(Self, Self) -> Bool
+pub fn ChainFault::not_equal(Self, Self) -> Bool
+pub fn ChainFault::to_repr(Self) -> @debug.Repr
+
+pub(all) struct ChainFinding {
+  item : String
+  fault : ChainFault
+  first : Match
+  second : Match
+}
+
 #derive(Eq, @debug.Debug)
 pub(all) struct Finding {
   handoff : String

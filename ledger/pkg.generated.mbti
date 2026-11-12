@@ -1,0 +1,64 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "Qlcdsba/sealune/ledger"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn reconcile(Array[Slip], Array[Slip]) -> Reconciliation
+
+// Errors
+
+// Types and methods
+#derive(Eq, @debug.Debug)
+pub(all) struct Finding {
+  handoff : String
+  fault : PairFault
+  releases : Array[Int32]
+  receipts : Array[Int32]
+}
+pub fn Finding::equal(Self, Self) -> Bool
+pub fn Finding::not_equal(Self, Self) -> Bool
+pub fn Finding::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Match {
+  release : Slip
+  receipt : Slip
+  release_row : Int32
+  receipt_row : Int32
+}
+
+#derive(Eq, @debug.Debug)
+pub(all) enum PairFault {
+  MissingRelease
+  MissingReceipt
+  DuplicateRelease
+  DuplicateReceipt
+  ItemMismatch
+  SenderMismatch
+  ReceiverMismatch
+  SealMismatch
+  ReceiptBeforeRelease
+}
+pub fn PairFault::equal(Self, Self) -> Bool
+pub fn PairFault::not_equal(Self, Self) -> Bool
+pub fn PairFault::to_repr(Self) -> @debug.Repr
+
+pub(all) struct Reconciliation {
+  matches : Array[Match]
+  findings : Array[Finding]
+}
+
+pub(all) struct Slip {
+  handoff : String
+  item : String
+  sender : String
+  receiver : String
+  seal : String
+  time : Int64
+}
+
+// Type aliases
+
+// Traits

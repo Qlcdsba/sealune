@@ -8,9 +8,16 @@ import {
 // Values
 pub fn check_continuity(Reconciliation) -> Array[ChainFinding]
 
+pub fn decode_ledger(StringView) -> Array[Slip] raise LedgerInputError
+
 pub fn reconcile(Array[Slip], Array[Slip]) -> Reconciliation
 
 // Errors
+pub suberror LedgerInputError {
+  InvalidJson
+  ExpectedArray
+  InvalidField(Int32, String)
+}
 
 // Types and methods
 #derive(Eq, @debug.Debug)

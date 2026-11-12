@@ -1,0 +1,18 @@
+name: Verify Sealune
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  moonbit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hustcer/setup-moonbit@v1
+      - run: moon fmt --check
+      - run: moon check --deny-warn --target js
+      - run: moon test --deny-warn --target js
+      - run: moon test --deny-warn --target wasm-gc
+      - run: moon build --target js

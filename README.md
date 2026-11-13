@@ -42,6 +42,8 @@ The report includes matched handoffs, pair findings, and continuity findings. Ro
 
 Import `Qlcdsba/sealune/ledger`. Pass text to `decode_ledger`, pass the two decoded arrays to `reconcile`, and pass that result to `check_continuity`. The library can also accept typed slips directly and makes no filesystem calls.
 
+The [tested library example](ledger/README.mbt.md) shows how to locate the two rows for a seal discrepancy.
+
 ```sh
 moon fmt --check
 moon check --deny-warn --target js

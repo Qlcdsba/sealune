@@ -11,6 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: hustcer/setup-moonbit@v1
+      - run: moon update
       - run: moon fmt --check
       - run: moon check --deny-warn --target js
       - run: moon test --deny-warn --target js

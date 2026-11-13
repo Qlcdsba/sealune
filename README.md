@@ -10,7 +10,15 @@ Once two slips agree, Sealune can compare consecutive handoffs for that item. It
 
 ## Try the training exercise
 
-With MoonBit and Node.js installed, run this from the repository root:
+Install [MoonBit](https://www.moonbitlang.com/download) and Node.js, then clone the repository and initialize the MoonBit registry index:
+
+```sh
+git clone https://github.com/Qlcdsba/sealune.git
+cd sealune
+moon update
+```
+
+Run the exercise from the repository root:
 
 ```sh
 moon run sealune --target js -- exercise/releases.json exercise/receipts.json

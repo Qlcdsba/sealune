@@ -2,6 +2,8 @@ name = "Qlcdsba/sealune"
 
 version = "0.1.0"
 
+readme = "README.md"
+
 repository = "https://github.com/Qlcdsba/sealune"
 
 license = "MIT"

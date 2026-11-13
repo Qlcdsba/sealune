@@ -1,0 +1,71 @@
+{
+  "matches": [
+    {
+      "handoff": "T-01",
+      "release_row": 1,
+      "receipt_row": 2
+    },
+    {
+      "handoff": "T-02",
+      "release_row": 2,
+      "receipt_row": 1
+    },
+    {
+      "handoff": "T-06",
+      "release_row": 6,
+      "receipt_row": 7
+    },
+    {
+      "handoff": "T-07",
+      "release_row": 7,
+      "receipt_row": 6
+    }
+  ],
+  "pair_findings": [
+    {
+      "code": "missing_receipt",
+      "handoff": "T-03",
+      "release_rows": [
+        3
+      ],
+      "receipt_rows": []
+    },
+    {
+      "code": "seal_mismatch",
+      "handoff": "T-04",
+      "release_rows": [
+        4
+      ],
+      "receipt_rows": [
+        3
+      ]
+    },
+    {
+      "code": "duplicate_receipt",
+      "handoff": "T-05",
+      "release_rows": [
+        5
+      ],
+      "receipt_rows": [
+        4,
+        5
+      ]
+    }
+  ],
+  "continuity_findings": [
+    {
+      "code": "custodian_mismatch",
+      "item": "P-14",
+      "first": {
+        "handoff": "T-01",
+        "release_row": 1,
+        "receipt_row": 2
+      },
+      "second": {
+        "handoff": "T-02",
+        "release_row": 2,
+        "receipt_row": 1
+      }
+    }
+  ]
+}

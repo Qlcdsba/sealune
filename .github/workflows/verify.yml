@@ -17,3 +17,9 @@ jobs:
       - run: moon test --deny-warn --target js
       - run: moon test --deny-warn --target wasm-gc
       - run: moon build --target js
+      - name: Check the training report
+        run: |
+          status=0
+          moon run sealune --target js -- exercise/releases.json exercise/receipts.json > report.json || status=$?
+          test "$status" = 1
+          diff -u exercise/expected.json report.json

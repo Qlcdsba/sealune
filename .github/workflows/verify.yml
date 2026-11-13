@@ -23,3 +23,12 @@ jobs:
           moon run sealune --target js -- exercise/releases.json exercise/receipts.json > report.json || status=$?
           test "$status" = 1
           diff -u exercise/expected.json report.json
+      - name: Verify clean and unreadable ledger exit codes
+        run: |
+          printf '[]\n' > empty-ledger.json
+          moon run sealune --target js -- empty-ledger.json empty-ledger.json > clean-report.json
+          jq -e '. == {matches: [], pair_findings: [], continuity_findings: []}' clean-report.json
+          status=0
+          moon run sealune --target js -- absent-ledger.json empty-ledger.json > input-error.json || status=$?
+          test "$status" = 2
+          jq -e '. == {error: "Could not read the release ledger."}' input-error.json

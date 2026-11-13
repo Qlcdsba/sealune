@@ -51,3 +51,5 @@ moon build --target js
 ```
 
 The participant set the investigation-training use case, approved the project direction and name, and specified staged delivery. AI assisted with implementation, fixtures, tests, and documentation. The exercise records are fictional.
+
+See [source and license notes](NOTICE.md) for dependencies and fixture provenance.

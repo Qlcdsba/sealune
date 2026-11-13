@@ -51,3 +51,21 @@ test "a release at the prior receipt time can continue the chain" {
   let result = @ledger.reconcile([a, b], [{ ..a, time: 20L, }, b])
   debug_inspect(@ledger.check_continuity(result).length(), content="0")
 }
+
+///|
+test "a short handoff cannot hide a still-open earlier transfer" {
+  let a = chain_slip("T-1", "P-1", "field", "store", 10L)
+  let b = chain_slip("T-2", "P-1", "store", "lab", 20L)
+  let c = chain_slip("T-3", "P-1", "lab", "archive", 30L)
+  let result = @ledger.reconcile([a, b, c], [{ ..a, time: 40L, }, b, c])
+  let findings = @ledger.check_continuity(result)
+  let expected : Array[@ledger.ChainFault] = [
+    OverlappingCustody,
+    OverlappingCustody,
+  ]
+  assert_eq(findings.map(finding => finding.fault), expected)
+  debug_inspect(
+    findings.map(finding => finding.first.release.handoff),
+    content="[\"T-1\", \"T-1\"]",
+  )
+}

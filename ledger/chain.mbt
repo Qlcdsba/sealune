@@ -22,8 +22,8 @@ pub(all) struct ChainFinding {
 
 ///|
 /// Compare consecutive confirmed handoffs for each item. Tied release
-/// times are reported as ambiguous, and comparisons touching a tied
-/// group are skipped because its boundary handoffs are unknown.
+/// times are reported as ambiguous. Custodian comparisons touching a
+/// tied group are skipped because its boundary handoffs are unknown.
 pub fn check_continuity(result : Reconciliation) -> Array[ChainFinding] {
   let by_item : Map[String, Array[Match]] = Map([])
   let items = []
@@ -48,14 +48,28 @@ pub fn check_continuity(result : Reconciliation) -> Array[ChainFinding] {
         by_time
       }
     })
+    // Keep the latest receipt from all earlier releases. An intervening
+    // short transfer must not hide a longer one that is still open.
+    let mut latest_receipt = pairs[0]
     for index in 1..<pairs.length() {
       let first = pairs[index - 1]
       let second = pairs[index]
       let first_time = first.release.time
       let second_time = second.release.time
+      if first.receipt.time > latest_receipt.receipt.time {
+        latest_receipt = first
+      }
       if first_time == second_time {
         findings.push({ item, fault: AmbiguousOrder, first, second, })
         continue
+      }
+      if latest_receipt.receipt.time > second_time {
+        findings.push({
+          item,
+          fault: OverlappingCustody,
+          first: latest_receipt,
+          second,
+        })
       }
       let first_is_tied = index >= 2 &&
         pairs[index - 2].release.time == first_time
@@ -63,9 +77,6 @@ pub fn check_continuity(result : Reconciliation) -> Array[ChainFinding] {
         pairs[index + 1].release.time == second_time
       if first_is_tied || second_is_tied {
         continue
-      }
-      if first.receipt.time > second_time {
-        findings.push({ item, fault: OverlappingCustody, first, second, })
       }
       if first.receipt.receiver != second.release.sender {
         findings.push({ item, fault: CustodianMismatch, first, second, })

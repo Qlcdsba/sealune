@@ -164,7 +164,7 @@ fn csv_time(
   if digits == 0 {
     raise InvalidCell(record.line, "time")
   }
-  @string.parse_int64(literal[:], base=10) catch {
+  @string.parse_int64(literal[:]) catch {
     _ => raise InvalidCell(record.line, "time")
   }
 }

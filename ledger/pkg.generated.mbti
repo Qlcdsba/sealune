@@ -8,11 +8,23 @@ import {
 // Values
 pub fn check_continuity(Reconciliation) -> Array[ChainFinding]
 
+pub fn decode_csv_ledger(StringView) -> Array[Slip] raise CsvLedgerError
+
 pub fn decode_ledger(StringView) -> Array[Slip] raise LedgerInputError
 
 pub fn reconcile(Array[Slip], Array[Slip]) -> Reconciliation
 
+pub fn review(Array[Slip], Array[Slip]) -> Review
+
 // Errors
+pub suberror CsvLedgerError {
+  MalformedCsv(Int32)
+  MissingColumn(String)
+  DuplicateColumn(String)
+  CsvWidth(Int32, Int32, Int32)
+  InvalidCell(Int32, String)
+}
+
 pub suberror LedgerInputError {
   InvalidJson
   ExpectedArray
@@ -48,6 +60,13 @@ pub fn Finding::equal(Self, Self) -> Bool
 pub fn Finding::not_equal(Self, Self) -> Bool
 pub fn Finding::to_repr(Self) -> @debug.Repr
 
+pub(all) struct ItemReview {
+  item : String
+  sources : Array[SourceRow]
+  matches : Array[Match]
+  issues : Array[ReviewIssue]
+}
+
 pub(all) struct Match {
   release : Slip
   receipt : Slip
@@ -76,6 +95,17 @@ pub(all) struct Reconciliation {
   findings : Array[Finding]
 }
 
+pub(all) struct Review {
+  reconciliation : Reconciliation
+  continuity : Array[ChainFinding]
+  items : Array[ItemReview]
+}
+
+pub(all) enum ReviewIssue {
+  PairIssue(Int32)
+  ContinuityIssue(Int32)
+}
+
 pub(all) struct Slip {
   handoff : String
   item : String
@@ -83,6 +113,11 @@ pub(all) struct Slip {
   receiver : String
   seal : String
   time : Int64
+}
+
+pub(all) enum SourceRow {
+  ReleaseRow(Int32)
+  ReceiptRow(Int32)
 }
 
 // Type aliases

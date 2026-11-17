@@ -23,6 +23,18 @@ jobs:
           moon run sealune --target js -- exercise/releases.json exercise/receipts.json > report.json || status=$?
           test "$status" = 1
           diff -u exercise/expected.json report.json
+      - name: Check CSV import and the item review queue
+        run: |
+          status=0
+          moon run sealune --target js -- exercise/releases.csv exercise/receipts.json > csv-report.json || status=$?
+          test "$status" = 1
+          diff -u exercise/expected.json csv-report.json
+          status=0
+          moon run sealune --target js -- --queue exercise/releases.csv exercise/receipts.json > queue.json || status=$?
+          test "$status" = 1
+          jq -e '.summary.flagged_items == 4 and ([.queue[].item] == ["P-14", "P-22", "P-35", "P-48"])' queue.json
+          moon run sealune --target js -- --item P-51 exercise/releases.csv exercise/receipts.json > item.json
+          jq -e '.issues == [] and ([.timeline[].handoff] == ["T-06", "T-07"])' item.json
       - name: Verify clean and unreadable ledger exit codes
         run: |
           printf '[]\n' > empty-ledger.json

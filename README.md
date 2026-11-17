@@ -28,6 +28,27 @@ The exercise follows fictional exhibits through a field team, storage, and a lab
 
 ## Ledger format
 
+Each input can be JSON or a UTF-8 `.csv` export. Use the column names
+`handoff,item,sender,receiver,seal,time` in the CSV header. Columns can be
+reordered and additional columns are ignored. The importer accepts quoted
+fields, doubled quotes, and LF or CRLF line endings. Findings refer to
+one-based data records, excluding the header. CSV input errors refer to
+physical lines, including the header.
+
+```sh
+moon run sealune --target js -- --queue exercise/releases.csv exercise/receipts.json
+moon run sealune --target js -- --item P-51 exercise/releases.csv exercise/receipts.json
+```
+
+`--queue` groups findings by affected item, including items on only one side
+of the ledger. It reports overall counts and returns 1 when it finds issues.
+`--item` shows the selected item's source records, matched timeline, and
+findings. A clean item returns 0 even when other items need review. An unknown
+item returns 2. Timeline timestamps are decimal strings to preserve the full
+integer value for JSON consumers.
+
+### JSON
+
 Supply a UTF-8 JSON array for each side. Each row has the same fields:
 
 ```json
